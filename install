@@ -1,0 +1,4 @@
+#!/bin/bash
+
+[[ -s ~/.tmux.conf ]] && source ~/.fzf.zsh && \
+    echo "Fuzzy Finder ..... [ OK ]"

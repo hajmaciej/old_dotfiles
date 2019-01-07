@@ -1,0 +1,35 @@
+#!/bin/bash
+
+alias downloads=downloads
+
+function downloads() {
+    local minutes=$1
+    local minutes_part=''
+
+    if (( $# == 0 )); then
+	cat <<-'EOF' >&2
+	    Usage: downloads [-option value]
+
+	    Options:
+		-m, --minutes	Minutes
+		-d, --days	Days (not implemented yet)
+		-e, --extension	Extension
+	EOF
+	return 0
+    fi
+
+    while getopts ":d:m:" option; do
+	case ${option} in
+	    m) minutes=${OPTARG}
+		find ~/Pobrane -type f -cmin -${minutes} 2> /dev/null
+	    ;;
+	    \?) echo "Usage: downloads [-option value]." >&2
+	    ;;
+	    :)
+		echo "Option -$OPTARG requires an argument." >&2
+	    ;;
+	esac
+    done
+}
+
+
