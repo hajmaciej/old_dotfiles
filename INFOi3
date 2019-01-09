@@ -1,7 +1,0 @@
-# i3 config is a conglomerate of smaller config scripts from .dotfiles/i3/*
-# during zsh reload .dotfiles/i3/scripts_order.sh connects all parts.
-# It would be better if this connection had occur during normal i3 reload.
-
-# DISABLE POWERBUTTON behaviour
-# edit /etc/systemd/logind.conf
-# HandlePowerKey=ignore
