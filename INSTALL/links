@@ -1,0 +1,35 @@
+#!/bin/bash
+
+if [[ ! $# -eq 1 ]]; then
+    echo "USAGE: "
+    echo "blabla "
+fi
+
+LINK=$1
+DOTFILES_DIR=$HOME"/git/dotfiles"
+OLD='.old'
+ARCHIVIZATION_DATE="# Archived $(date)"
+
+function link {
+    # if dotfile exists in home folder, it will be moved to name.old
+    # additionally that file will have info about archivization date 
+    if [[ -s $HOME/$LINK ]]; then
+	mv $HOME/$LINK "$HOME/$LINK$OLD"
+	echo ${ARCHIVIZATION_DATE//?/\#} >> $HOME/$LINK$OLD
+	echo $ARCHIVIZATION_DATE >> $HOME/$LINK$OLD
+    fi 
+    ln -s $DOTFILES_DIR/${LINK/\./} $HOME/$LINK
+}
+
+function unlink {
+    if [[ ! -s $HOME/$LINK$OLD ]]; then
+	echo "> Plik $HOME/$LINK nie istnieje!"    
+    else
+	rm $HOME/$LINK
+	echo ${ARCHIVIZATION_DATE//?/\#} >> $HOME/$LINK$OLD
+	echo ${ARCHIVIZATION_DATE/Archived/Unarchived} >> $HOME/$LINK$OLD
+	mv $HOME/$LINK$OLD $HOME/$LINK
+    fi
+} 
+
+link
