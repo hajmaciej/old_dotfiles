@@ -21,7 +21,7 @@ map <leader>s :source ~/.vimrc<CR>
 " colorscheme VisualStudioDark
 colorscheme codedark
 let g:airline_theme = 'codedark'
-set background=light
+set background=dark
 set t_Co=256
 
 set fileencodings=ucs-bom,utf-8,sjis

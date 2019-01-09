@@ -12,3 +12,8 @@ When you want to update tmux-yank use prefix–U.
 
 
 https://jamesoff.net/2017/08/26/tmux-configuration.html
+
+git clone https://github.com/tmux-plugins/tpm /home/$USER/.tmux/plugins/tpm
+
+# This one is obsolete
+# curl -fLo /home/fm/.tmux/plugins/tpm --create-dirs http://github.com/tmux-plugins/tpm

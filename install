@@ -1,4 +1,20 @@
 #!/bin/bash
 
-[[ -s ~/.tmux.conf ]] && source ~/.fzf.zsh && \
-    echo "Fuzzy Finder ..... [ OK ]"
+
+function check_linux_version {
+    if [ -s /etc/issue ]; then
+	LINUX_VERSION=$(cat /etc/issue | grep Welcome)
+    else
+	echo "Unrecognized Linux version :("
+	return 1
+    fi
+
+    return 0
+}
+
+check_linux_version
+
+echo $LINUX_VERSION 
+
+# [[ -s ~/.tmux.conf ]] && source ~/.fzf.zsh && \
+#    echo "Fuzzy Finder ..... [ OK ]"
