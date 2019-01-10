@@ -83,7 +83,7 @@ plugins=(
 source $ZSH/oh-my-zsh.sh
 # source ~/.oh-my-zsh/custom/plugins/antigen.zsh
 
-source ~/.dotfiles/rc
+source ~/.bashrc
 
 # User configuration
 

@@ -1,3 +1,6 @@
+##
+# Należałoby wrzucić przerobiony theme agnosterzak na github
+# i zaciągać przy instalacji
 
 # folder for all plugins from git? fd, fzf, and such
 # utworzyć folder na wszystkie zależności z githuba
