@@ -4,8 +4,8 @@
 TMUX_DIR="$HOME/.tmux"
 TMUX_NAME='tmux-2.8.tar.gz'
 
-function download_tmux {
-    local tmux_git="https://github.com/tmux/tmux/releases/download/2.8/tmux-2.8.tar.gz"
+function download_i3 {
+    local tmux_git="https://codeload.github.com/i3/i3/tar.gz/4.16"
 
     curl --silent -fLo $TMUX_DIR/temp/$TMUX_NAME --create-dirs $tmux_git
     if [ $? -eq 0 ]; then
