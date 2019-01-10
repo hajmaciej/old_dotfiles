@@ -10,6 +10,20 @@ DOTFILES_DIR=$HOME"/git/dotfiles"
 OLD='.old'
 ARCHIVIZATION_DATE="# Archived $(date)"
 
+function check_links {
+    local file_type=$(file $HOME/$LINK)
+    if [[ $file_type =~ 'link' ]]; then
+	echo "> Plik $HOME/$LINK jest dowiazaniem symbolicznym."
+	return 0
+    elif [[ $file_type =~ 'text' ]]; then
+	echo "> Plik $HOME/$LINK jest zwyklym plikiem."
+	return 0	
+    else
+	echo "> Plik $HOME/$LINK nie istnieje!"
+	return 1
+    fi
+}
+
 function link {
     # if dotfile exists in home folder, it will be moved to name.old
     # additionally that file will have info about archivization date 
@@ -19,17 +33,20 @@ function link {
 	echo $ARCHIVIZATION_DATE >> $HOME/$LINK$OLD
     fi 
     ln -s $DOTFILES_DIR/${LINK/\./} $HOME/$LINK
+    return 0
 }
 
 function unlink {
     if [[ ! -s $HOME/$LINK$OLD ]]; then
 	echo "> Plik $HOME/$LINK nie istnieje!"    
+	return 1
     else
 	rm $HOME/$LINK
 	echo ${ARCHIVIZATION_DATE//?/\#} >> $HOME/$LINK$OLD
-	echo ${ARCHIVIZATION_DATE/Archived/Unarchived} >> $HOME/$LINK$OLD
+	echo ${ARCHIVIZATION_DATE/Archived/Restored} >> $HOME/$LINK$OLD
 	mv $HOME/$LINK$OLD $HOME/$LINK
+	return 0
     fi
 } 
 
-link
+check_links
