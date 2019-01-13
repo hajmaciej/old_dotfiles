@@ -2,6 +2,17 @@
 # COOL COMMANDS 
 ###################################################################################
 
+eval eg.
+    c="ls -s | sort -n"
+    $c <- this wont work, as bash wouldnt process pipe symbol
+    eval $c <- it has to be executed that way
+
+    opts="a b \$1 \$2 "
+    set -- "$opts"       <- this will not work
+    eval set -- $opts    <- this will work
+    echo options are: $@
+
+
 ${variable//?/\#}
     fills variable with #, good thing for decorator
 
