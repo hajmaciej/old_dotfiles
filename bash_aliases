@@ -1,5 +1,5 @@
 # alias rel='source ~/.zshrc'
-alias rc='source $HOME/.bashrc'
+alias rc='source ~/.bashrc'
 
 alias down='cd /mnt/c/Users/morganix/Downloads/'
 
@@ -16,7 +16,7 @@ alias ls='ls --color --group-directories-first'
 alias la='ls -lAh --color --group-directories-first'
 alias lsa='ls -lah --color --group-directories-first'
 
-alias rm='trash'
+# alias rm='trash'
 
 alias xclip='xclip -selection clipboard'
 
