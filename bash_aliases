@@ -1,10 +1,14 @@
 # alias rel='source ~/.zshrc'
 alias rc='source $HOME/.bashrc'
 
+alias down='cd /mnt/c/Users/morganix/Downloads/'
+
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias pegrep='grep -iP --color=auto'
+
+alias ..='cd ..'
 
 alias l='ls -lah --color --group-directories-first'
 alias ll='ls -lh --color --group-directories-first'
