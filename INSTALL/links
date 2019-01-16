@@ -5,8 +5,13 @@ OLD='.old'
 ARCHIVIZATION_DATE="# Archived $(date)"
 
 function usage {
-	echo "Usage: $0 [-a|-r|-c] file [-h]"
-	exit 2
+	echo "Usage: $0 [-a|-r|-f] file [-h]"
+	echo "	-a adds dotfile to $HOME"
+	echo "	-r removes and restores (if there was backup file during dotfile add)"
+	echo "	-f checks dotfile if it is a symbolic link or regular text file"
+	echo "	-l lists dotfiles gathered in dotfile folder"
+	echo "	-h help helps ;)"
+	return
 }
 
 function set_variable {
@@ -18,6 +23,7 @@ function set_variable {
 #         echo "Error: $varname already set"
         usage
     fi
+    return
 }
 
 function list_dotfiles {
@@ -25,7 +31,7 @@ function list_dotfiles {
     return 0
 }
 
-while getopts ":c:a:r:hl" OPTIONS; do
+while getopts ":f:a:r:hl" OPTIONS; do
 	case "${OPTIONS}" in 
 		f | -file)
 			LINK=$OPTARG
@@ -40,26 +46,35 @@ while getopts ":c:a:r:hl" OPTIONS; do
 			set_variable ACTION RESTORE
 			;;
 		l | -list)
-			echo "> Dotfiles:"
+			echo "Dotfiles provided by dotfiles folder are:"
 			list_dotfiles
 			exit 0	
 			;;
+		# c | -clear)
+			# clears the targeted file from archivization infos
 		# t | -target)
 			# to which dotfile link
+			# used only with -a
 		# v | verbose)
 		#	;;	
 		h | -help)
 			usage
 			exit 0
 			;;
+		# q | -quiet)
+		# might be added as the first parameter?
 		:)
-			echo "MISSING PARAMETER"
-			exit 1
-			;;
+		    echo "Missing or redundant parameter."
+		    echo ""
+		    usage
+		    exit 1
+		    ;;
 		*)
-			echo "ABNORMAL"
-			exit 1
-			;;
+		    echo "Abnormal termination."
+		    echo ""
+		    usage
+		    exit 1
+		    ;;
 	esac
 done
 
@@ -68,14 +83,15 @@ done
 function file_check {
     local file_type=$(file $HOME/$LINK)
     if [[ $file_type =~ 'link' ]]; then
-	echo "> Plik $HOME/$LINK jest dowiazaniem symbolicznym."
+	echo "File $HOME/$LINK is a symbolic link."
 	return 0
     elif [[ $file_type =~ 'text' ]]; then
-	echo "> Plik $HOME/$LINK jest zwyklym plikiem."
-	return 0	
+	echo "File $HOME/$LINK is a regular text file config."
+	return 1	
     else
-	echo "> Plik $HOME/$LINK nie istnieje!"
-	return 1
+    	echo "File $HOME/$LINK does not exist!"
+	echo "Aborted."
+	return 2
     fi
 }
 
@@ -84,64 +100,91 @@ function add_link {
     # additionally that file will h REPLAY
     # info about archivization date 
     local file_type=$(file $HOME/$LINK)
-    if [[ ! $file_type =~ 'link' ]]; then # file has to be regular text file to process # file has to be regular text file to process
+    # file has to be regular text file to process
+    if [[ ! $file_type =~ 'link' ]]; then 
+	# Check if there is existing dotfile in dotfile folder
         if [[ -s $DOTFILES_DIR/${LINK/\./} ]]; then
-            read -p "> Are you sure? [Y/n]: "  REPLAY
+	    echo "$LINK will be added to $HOME as a symbolic link."
+            read -p "Do you want to proceed? [Y/n]: "  REPLAY
+	    # user decded to add the link
             if [[ $REPLAY =~ ^[Yy]$ ]] ; then
+		# found existing dotfile in home folder - it has to be archived
                 if [[ -s $HOME/$LINK ]]; then
+		    echo "Found existing $HOME/$LINK. It will be archived as $HOME/$LINK$OLD."
                     mv $HOME/$LINK "$HOME/$LINK$OLD"
-    	        echo ${ARCHIVIZATION_DATE//?/\#} >> $HOME/$LINK$OLD
+    	            echo ${ARCHIVIZATION_DATE//?/\#} >> $HOME/$LINK$OLD
                     echo $ARCHIVIZATION_DATE >> $HOME/$LINK$OLD
                 fi 
-            ln -s $DOTFILES_DIR/${LINK/\./} $HOME/$LINK
+                ln -s $DOTFILES_DIR/${LINK/\./} $HOME/$LINK
+	        echo "$HOME/$LINK was linked to $DOTFILES_DIR/${LINK/\./}"
+		exit 0
+	    # user decided not to add the link
+	    else
+		echo "Aborted."
+		exit 1
             fi
+	# there is no such dotfile in dotfile folder provided
         else
-    	echo "> Plik $DOTFILES_DIR/$LINK nie istnieje!"
+       	    echo "File $DOTFILES_DIR/$LINK does not exist!"
+	    echo "Aborted."
+	    exit 1
         fi
+    # dotfile is already a symbolic link
+    else
+	echo "It looks like $HOME/$LINK is already linked to the dotfile folder."
+	echo "Please check."
+	exit 2
     fi
     return 0
 }
 
 function restore_link {
     local file_type=$(file $HOME/$LINK)
-    if [[ $file_type =~ 'link' ]]; then # file type has to be link to be restored
-        if [[ ! -s $HOME/$LINK$OLD ]]; then # if no backuo file
-	    echo "> It appears that there is no backup file ($HOME/$LINK$OLD)"
-	    echo "> Link $HOME/$LINK will be removed."
-            read -p "> Are you sure? [Y/n]: " REPLAY
+    # file type has to be link to be restored
+    if [[ $file_type =~ 'link' ]]; then 
+	echo "Link $HOME/$LINK will be removed."
+        # if no backuo file
+        if [[ ! -s $HOME/$LINK$OLD ]]; then 
+	    echo "It appears that there is no backup file ($HOME/$LINK$OLD)"
+            read -p "Do you want to proceed? [Y/n]: " REPLAY
             if [[ $REPLAY =~ ^[Yy]$ ]]; then
 	        rm $HOME/$LINK
+		echo "$HOME/$LINK was removed."
 	        return 0
 	    else
+		echo "Aborted."
 	        return 1
 	    fi
-        else # With backup file
-            read -p "> Are you sure? [Y/n]: " REPLAY
+        # With backup file
+        else 
+	    echo "Found archived file $LINK$OLD which will be restored."
+            read -p "Do you want to proceed? [Y/n]: " REPLAY
             if [[ $REPLAY =~ ^[Yy]$ ]]; then
                 rm $HOME/$LINK
         	echo ${ARCHIVIZATION_DATE//?/\#} >> $HOME/$LINK$OLD
         	echo ${ARCHIVIZATION_DATE/Archived/Restored} >> $HOME/$LINK$OLD
         	mv $HOME/$LINK$OLD $HOME/$LINK
+		echo "$HOME/$LINK was removed, $HOME/$LINK$OLD was succesfuly restored."
         	return 0
             fi
         fi
-    else # file is regular text file - we take no action
-        echo "> File $HOME/$LINK is not a link."
+    # file is regular text file - we take no action
+    else 
+        echo "File $HOME/$LINK is not a link, or does not exist."
+	echo "Aborted."
 	return 1
     fi
 } 
 
 case $ACTION in
     FILE_CHECK) 
-	    echo "> Check $LINK"
+	    echo "Checking the file type of $LINK"
 	    file_check $LINK
 	    ;;
     ADD) 
-	    echo "> Add $LINK" 
 	    add_link $LINK
 	    ;;
     RESTORE) 
-	    echo "> Restore $LINK"
-	    restore_link 
+	    restore_link $LINK
 	    ;;
 esac
