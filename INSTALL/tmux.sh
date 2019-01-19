@@ -14,6 +14,16 @@ function download_tmux {
     return 0
 }
 
+function download_tpm {
+    if [[ ! -e "$HOME/.tmux/tpm" ]]; then
+	git clone "https://github.com/tmux-plugins/tpm" "$HOME/.tmux/tpm"
+	return 0
+    else
+	echo "Some kind of error occured"
+	return 1
+    fi
+}
+
 function extract_tmux {
     tar -xf $TMUX_DIR/temp/$TMUX_NAME --directory $TMUX_DIR/temp
     if [ $? -eq 0 ]; then
@@ -22,12 +32,6 @@ function extract_tmux {
     return 0
 }
 
-# TODO
-# Dependecies can be installed by RPMBUILD
-# function check_dependencies {
-#     zypper install libevent-devel
-#     zypper install ncurses-devel
-# }
 
 function compile_tmux {
     # from regular github, not released
@@ -41,7 +45,7 @@ function compile_tmux {
     return 0
 }
 
-if [ -d $TMUX_DIR/temp ]; then
+if [ -d "$TMUX_DIR/temp" ]; then
     echo "> Znaleziono temp"
     rm -fR $TMUX_DIR/temp
 fi
@@ -49,4 +53,16 @@ fi
 download_tmux
 extract_tmux
 compile_tmux
+
+# TODO
+# Dependecies can be installed by RPMBUILD
+# function check_dependencies {
+#     zypper install libevent-devel
+#     zypper install ncurses-devel
+# }
+
+# TODO
+# Make a function that creats a rpm package
+# it will be easier to manage it when uninstalling
+
 

@@ -117,25 +117,25 @@ function add_link {
                 fi 
                 ln -s $DOTFILES_DIR/${LINK/\./} $HOME/$LINK
 	        echo "$HOME/$LINK was linked to $DOTFILES_DIR/${LINK/\./}"
-		exit 0
+		return 0
 	    # user decided not to add the link
 	    else
 		echo "Aborted."
-		exit 1
+		return 1
             fi
 	# there is no such dotfile in dotfile folder provided
         else
        	    echo "File $DOTFILES_DIR/$LINK does not exist!"
 	    echo "Aborted."
-	    exit 1
+	    return 1
         fi
     # dotfile is already a symbolic link
     else
 	echo "It looks like $HOME/$LINK is already linked to the dotfile folder."
 	echo "Please check."
-	exit 2
+	return 2
     fi
-    return 0
+    return
 }
 
 function restore_link {

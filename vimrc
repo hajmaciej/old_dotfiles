@@ -8,6 +8,7 @@
 
 call plug#begin('~/.vim/plugged')
 " Plug 'scrooloose/nerdtree',
+Plug 'vim-syntastic/syntastic'
 Plug 'tomasiser/vim-code-dark',
 Plug 'junegunn/fzf'
 Plug 'vim-airline/vim-airline'
