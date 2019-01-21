@@ -1,5 +1,5 @@
 # alias rel='source ~/.zshrc'
-alias rc="source $HOME/.bashrc"
+alias rc='source $HOME/.bashrc'
 
 alias down='cd /mnt/c/Users/morganix/Downloads/'
 alias docs='cd /mnt/c/Users/morganix/Documents/'
