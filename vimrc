@@ -29,6 +29,7 @@ set fileencodings=ucs-bom,utf-8,sjis
 set number		" Show line numbers
 set relativenumber	" Relativve numbers
 set numberwidth=4
+set scrolloff=15
 set cursorline
 set cursorcolumn
 set linebreak		" Break lines at word (requires Wrap lines)
@@ -64,6 +65,8 @@ set backspace=indent,eol,start	" Backspace behaviour
 syntax enable
 set nocompatible
 
+"" For windows
+" set clipboard=unnamed
+"" For linux
 set clipboard=unnamedplus
-set scrolloff=15
 

@@ -93,7 +93,6 @@ function compile_tmux {
 }
 
 
-
 if ! download_tmux; then
     echo "Can't download tmux. Check your connection"
     exit 1

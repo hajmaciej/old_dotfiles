@@ -5,7 +5,7 @@
 # yum -y install xz
 
 if [[ -s /usr/bin/shellcheck-"${scversion}" ]]; then
-	echo "> shellcheck-"${scversion}""
+	echo "shellcheck-${scversion}"
 	exit 1
 else
     export scversion="stable" # or "v0.4.7", or "latest"

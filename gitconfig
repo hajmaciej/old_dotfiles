@@ -1,5 +1,5 @@
 [user]
-name = Maciej Haj
-email = pan.efem@gmail.com
-[http]
-	proxy = http://proxy-chain.intel.com:911
+    name = Maciej Haj
+    email = pan.efem@gmail.com
+[includeIf "gitidir:~/nd_*"]
+    path = /home/fm/.gitconfig-intel

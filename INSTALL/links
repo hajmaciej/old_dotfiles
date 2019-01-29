@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DOTFILES_DIR=$HOME"/git/dotfiles"
+DOTFILES_DIR="$HOME/git/dotfiles"
 OLD='.old'
 ARCHIVIZATION_DATE="# Archived $(date)"
 
@@ -15,10 +15,12 @@ function usage {
 }
 
 function set_variable {
-    local varname=$1
+    local varname
+    varname=$1
     shift
     if [ -z "${!varname}" ]; then
-        eval "$varname=\"$@\""
+	# eval "$varname=\"$@\""
+        eval "$varname=\"$*\""
     else
 #         echo "Error: $varname already set"
         usage
@@ -27,25 +29,25 @@ function set_variable {
 }
 
 function list_dotfiles {
-    find $DOTFILES_DIR -type f -not -iname "*md" -not -iname "*swp" 2> /dev/null | grep -v "\.git"
+    find "$DOTFILES_DIR" -type f -not -iname "*md" -not -iname "*swp" 2> /dev/null | grep -v "\.git"
     return 0
 }
 
 while getopts ":f:a:r:hl" OPTIONS; do
 	case "${OPTIONS}" in 
-		f | -file)
+		f) # file
 			LINK=$OPTARG
 			set_variable ACTION FILE_CHECK
 			;;
-		a | -add)
+		a) # add
 			LINK=$OPTARG
 			set_variable ACTION ADD
 			;;
-		r | -restore)
+		r) # restore
 			LINK=$OPTARG
 			set_variable ACTION RESTORE
 			;;
-		l | -list)
+		l) # list
 			echo "Dotfiles provided by dotfiles folder are:"
 			list_dotfiles
 			exit 0	
@@ -57,7 +59,7 @@ while getopts ":f:a:r:hl" OPTIONS; do
 			# used only with -a
 		# v | verbose)
 		#	;;	
-		h | -help)
+		h) # help
 			usage
 			exit 0
 			;;
@@ -81,7 +83,8 @@ done
 [ -z "$ACTION" ] && usage
 
 function file_check {
-    local file_type=$(file $HOME/$LINK)
+    local file_type
+    file_type=$(file "$HOME/$LINK")
     if [[ $file_type =~ 'link' ]]; then
 	echo "File $HOME/$LINK is a symbolic link."
 	return 0
@@ -99,7 +102,8 @@ function add_link {
     # if dotfile exists in home folder, it will be moved to name.old
     # additionally that file will h REPLAY
     # info about archivization date 
-    local file_type=$(file $HOME/$LINK)
+    local file_type
+    file_type=$(file "$HOME/$LINK")
     # file has to be regular text file to process
     if [[ ! $file_type =~ 'link' ]]; then 
 	# Check if there is existing dotfile in dotfile folder
@@ -111,11 +115,11 @@ function add_link {
 		# found existing dotfile in home folder - it has to be archived
                 if [[ -s $HOME/$LINK ]]; then
 		    echo "Found existing $HOME/$LINK. It will be archived as $HOME/$LINK$OLD."
-                    mv $HOME/$LINK "$HOME/$LINK$OLD"
-    	            echo ${ARCHIVIZATION_DATE//?/\#} >> $HOME/$LINK$OLD
-                    echo $ARCHIVIZATION_DATE >> $HOME/$LINK$OLD
+                    mv "$HOME/$LINK" "$HOME/$LINK$OLD"
+    	            echo "${ARCHIVIZATION_DATE//?/\#}" >> "$HOME/$LINK$OLD"
+                    echo "$ARCHIVIZATION_DATE" >> "$HOME/$LINK$OLD"
                 fi 
-                ln -s $DOTFILES_DIR/${LINK/\./} $HOME/$LINK
+                ln -s "$DOTFILES_DIR/${LINK/\./}" "$HOME/$LINK"
 	        echo "$HOME/$LINK was linked to $DOTFILES_DIR/${LINK/\./}"
 		return 0
 	    # user decided not to add the link
@@ -139,7 +143,8 @@ function add_link {
 }
 
 function restore_link {
-    local file_type=$(file $HOME/$LINK)
+    local file_type
+    file_type=$(file "$HOME/$LINK")
     # file type has to be link to be restored
     if [[ $file_type =~ 'link' ]]; then 
 	echo "Link $HOME/$LINK will be removed."
@@ -148,7 +153,7 @@ function restore_link {
 	    echo "It appears that there is no backup file ($HOME/$LINK$OLD)"
             read -p "Do you want to proceed? [Y/n]: " REPLAY
             if [[ $REPLAY =~ ^[Yy]$ ]]; then
-	        rm $HOME/$LINK
+	        rm "$HOME/$LINK"
 		echo "$HOME/$LINK was removed."
 	        return 0
 	    else
@@ -160,10 +165,10 @@ function restore_link {
 	    echo "Found archived file $LINK$OLD which will be restored."
             read -p "Do you want to proceed? [Y/n]: " REPLAY
             if [[ $REPLAY =~ ^[Yy]$ ]]; then
-                rm $HOME/$LINK
-        	echo ${ARCHIVIZATION_DATE//?/\#} >> $HOME/$LINK$OLD
-        	echo ${ARCHIVIZATION_DATE/Archived/Restored} >> $HOME/$LINK$OLD
-        	mv $HOME/$LINK$OLD $HOME/$LINK
+                rm "$HOME/$LINK"
+        	echo "${ARCHIVIZATION_DATE//?/\#}" >> "$HOME/$LINK$OLD"
+        	echo "${ARCHIVIZATION_DATE/Archived/Restored}" >> "$HOME/$LINK$OLD"
+        	mv "$HOME/$LINK$OLD" "$HOME/$LINK"
 		echo "$HOME/$LINK was removed, $HOME/$LINK$OLD was succesfuly restored."
         	return 0
             fi
@@ -179,12 +184,12 @@ function restore_link {
 case $ACTION in
     FILE_CHECK) 
 	    echo "Checking the file type of $LINK"
-	    file_check $LINK
+	    file_check "$LINK"
 	    ;;
     ADD) 
-	    add_link $LINK
+	    add_link "$LINK"
 	    ;;
     RESTORE) 
-	    restore_link $LINK
+	    restore_link "$LINK"
 	    ;;
 esac
