@@ -8,7 +8,7 @@
 
 call plug#begin('~/.vim/plugged')
 " Plug 'scrooloose/nerdtree',
-Plug 'w0rp/ale'
+" Plug 'w0rp/ale'
 Plug 'tomasiser/vim-code-dark',
 Plug 'junegunn/fzf'
 Plug 'vim-airline/vim-airline'
@@ -20,7 +20,7 @@ let mapleader=","
 map <leader>s :source ~/.vimrc<CR>
 
 " colorscheme VisualStudioDark
-colorscheme codedark
+" colorscheme codedark
 let g:airline_theme = 'codedark'
 set background=dark
 set t_Co=256
@@ -30,8 +30,8 @@ set number		" Show line numbers
 set relativenumber	" Relativve numbers
 set numberwidth=4
 set scrolloff=15
-set cursorline
-set cursorcolumn
+" set cursorline
+" set cursorcolumn
 set linebreak		" Break lines at word (requires Wrap lines)
 set showbreak=<<<<	" Wrap-broken line prefix
 set textwidth=100	" Line wrap (number of cols)
