@@ -7,7 +7,7 @@
 #      |_|   
 #
 
-
+c.auto_save.session=True
 # Uncomment this to still load settings configured via autoconfig.yml
 #config.load_autoconfig()
 
@@ -21,43 +21,58 @@
 
 # Custom Adblock list file
 #c.content.host_blocking.lists.append( str(config.configdir) + "/blockedHosts")
+config.set('url.start_pages', 'https://start.duckduckgo.com/?kae=d&k5=2&kp=-2&kaj=m&kao=-1&kav=1&kaq=-1&kam=osm&kap=-1&kak=-1&kax=-1&kay=b&kw=n&ks=n&ko=1&kx=5f819d&kaa=aaaaaa&kj=1d1f30&k8=5f819d&kt=p&k9=aaaaaa&k7=1d1f30')
+config.set('url.default_page', 'https://start.duckduckgo.com/?kae=d&k5=2&kp=-2&kaj=m&kao=-1&kav=1&kaq=-1&kam=osm&kap=-1&kak=-1&kax=-1&kay=b&kw=n&ks=n&ko=1&kx=5f819d&kaa=aaaaaa&kj=1d1f30&k8=5f819d&kt=p&k9=aaaaaa&k7=1d1f30')
+config.set('url.searchengines', {"DEFAULT": 'https://start.duckduckgo.com/?q={}&kae=d&k5=2&kp=-2&kaj=m&kao=-1&kav=1&kaq=-1&kam=osm&kap=-1&kak=-1&kax=-1&kay=b&kw=n&ks=n&ko=1&kx=5f819d&kaa=aaaaaa&kj=1d1f30&k8=5f819d&kt=p&k9=aaaaaa&k7=1d1f30'})
 
 # Custom CSS
 # c.content.user_stylesheets = [ 'css/main.css' ]
-{
- "DEFAULT":"https://duckduckgo.com/?q={}",
- "yt":"https://www.youtube.com/results?search_query={}",
- "g":"https://www.google.com/search?hl=pl&q={}",
- "ap":"https://www.diki.pl/slownik-angielskiego?q={}",
- "ud":"https://www.urbandictionary.com/define.php?term={}",
- "jp":"https://sjp.pl/{}",
- "pb":"https://thepiratebay.org/search/{}/0/99/0",
- "kat":"https://kickasstorrents.to/usearch/{}/",
- "yts":"https://yts.am/browse-movies/{}/all/all/0/latest",
- "fw":"https://www.filmweb.pl/search?q={}",
- "imdb":"https://www.imdb.com/find?ref_=nv_sr_fn&q={}&s=all",
- "d":"https://www.discogs.com/search/?q={}&type=all",
- "j":"https://www.juno.co.uk/search/?q[all][0]={}&hide_forthcoming=0&show_out_of_stock=1&media_type=vinyl&solrorder=date_down", 
- "cpp":"http://www.cplusplus.com/search.do?q={}",
- "cppr":"https://en.cppreference.com/mwiki/index.php?title=Special%3ASearch&search={}&button=",
- "sl":"http://slant.co/search?query={}",
- "alter":"https://alternativeto.net/browse/search?q={}"
-}
-# Change start/default pages + search engine
-#    config.set('url.start_pages', 'https://start.duckduckgo.com/?kae=d&k5=2&kp=-2&kaj=m&kao=-1&kav=1&kaq=-1&kam=osm&kap=-1&kak=-1&kax=-1&kay=b&kw=n&ks=n&ko=1&kx=5f819d&kaa=aaaaaa&kj=1d1f30&k8=5f819d&kt=p&k9=aaaaaa&k7=1d1f30')
-#    config.set('url.default_page', 'https://start.duckduckgo.com/?kae=d&k5=2&kp=-2&kaj=m&kao=-1&kav=1&kaq=-1&kam=osm&kap=-1&kak=-1&kax=-1&kay=b&kw=n&ks=n&ko=1&kx=5f819d&kaa=aaaaaa&kj=1d1f30&k8=5f819d&kt=p&k9=aaaaaa&k7=1d1f30')
-#    config.set('url.searchengines', {"DEFAULT": 'https://start.duckduckgo.com/?q={}&kae=d&k5=2&kp=-2&kaj=m&kao=-1&kav=1&kaq=-1&kam=osm&kap=-1&kak=-1&kax=-1&kay=b&kw=n&ks=n&ko=1&kx=5f819d&kaa=aaaaaa&kj=1d1f30&k8=5f819d&kt=p&k9=aaaaaa&k7=1d1f30'})
-#
-# Tab settings
-# config.set('tabs.padding', {"top": 1, "bottom": 2, "left": 5, "right": 5})
-# config.set('tabs.indicator.width', 0)
-# config.set('tabs.favicons.scale', 1.2)
+config.set('url.searchengines',
+    {"DEFAULT":"https://duckduckgo.com/?q={}",
+    "yt":"https://www.youtube.com/results?search_query={}",
+    "g":"https://www.google.com/search?hl=pl&q={}",
+    "ap":"https://www.diki.pl/slownik-angielskiego?q={}",
+    "ud":"https://www.urbandictionary.com/define.php?term={}",
+    "jp":"https://sjp.pl/{}",
+    "pb":"https://thepiratebay.org/search/{}/0/99/0",
+    "kat":"https://kickasstorrents.to/usearch/{}/",
+    "yts":"https://yts.am/browse-movies/{}/all/all/0/latest",
+    "fw":"https://www.filmweb.pl/search?q={}",
+    "imdb":"https://www.imdb.com/find?ref_=nv_sr_fn&q={}&s=all",
+    "d":"https://www.discogs.com/search/?q={}&type=all",
+    "j":"https://www.juno.co.uk/search/?q[all][0]={}&hide_forthcoming=0&show_out_of_stock=1&media_type=vinyl&solrorder=date_down",
+    "cpp":"http://www.cplusplus.com/search.do?q={}",
+    "cppr":"https://en.cppreference.com/mwiki/index.php?title=Special%3ASearch&search={}&button=",
+    "sl":"http://slant.co/search?query={}",
+    "alter":"https://alternativeto.net/browse/search?q={}" })
 
 # Disable case sensitivity for searching
 config.set('search.ignore_case', 'always')
 
 # Confirm exit when downloading files
 c.confirm_quit = ['downloads']
+# Change start/default pages + search engine
+
+#
+# Tab settings
+config.set('tabs.padding', {"top": 1, "bottom": 2, "left": 5, "right": 5})
+config.set('tabs.indicator.width', 0)
+config.set('tabs.favicons.scale', 1.2)
+
+#c.content.host_blocking.enabled=True
+#c.content.host_blocking.lists = [
+#    "https://easylist-downloads.adblockplus.org/antiadblockfilters.txt",
+#    "https://alleblock.pl/alleblock/alleblock.txt",
+#    "https://easylist-downloads.adblockplus.org/easyprivacy.txt",
+#    "https://easylist-downloads.adblockplus.org/fanboy-social.txt",
+#    "https://easylist-downloads.adblockplus.org/abp-filters-anti-cv.txt",
+#    "https://easylist-downloads.adblockplus.org/easylistpolish+easylist.txt",
+#    "https://raw.githubusercontent.com/azet12/KAD/master/KAD.txt",
+#    "https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/nocoin.txt",
+#    "https://raw.githubusercontent.com/MajkiIT/polish-ads-filter/master/polish-adblock-filters/adblock.txt"]
+    #"https://raw.githubusercontent.com/olegwukr/polish-privacy-filters/master/adblock.txt"]
+    #"https://raw.githubusercontent.com/MajkiIT/polish-ads-filter/master/adblock_social_filters/adblock_social_list.txt"]
+#"https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
 
 # Fonts
 c.fonts.monospace = '"DejaVu Sans Mono"'
