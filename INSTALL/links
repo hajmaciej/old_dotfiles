@@ -4,9 +4,10 @@
 DOTFILES_DIR=$(find ~ -iname "dotfiles" 2> /dev/null | egrep -i "git")
 OLD='.old'
 ARCHIVIZATION_DATE="# Archived $(date)"
+TARGET_DIR=''
 
 declare -A dotfiles_paths
-dotfiles_paths[qutebrowser]="$USER/.config/qutebrowser/config.py"
+dotfiles_paths[qutebrowser]="$HOME/.config/qutebrowser/config.py"
 
 function usage {
 	echo "Usage: $0 [-a|-r|-f] file [-h]"
@@ -40,15 +41,36 @@ function list_dotfiles {
 while getopts ":f:a:r:hl" OPTIONS; do
 	case "${OPTIONS}" in 
 		f) # file
-			LINK=$OPTARG
+			if [[ ${dotfiles_paths[$OPTARG]} ]]; then
+			    temp="${dotfiles_paths[$OPTARG]}"
+			    LINK="${temp##*/}"
+			    TARGET_DIR="${temp%/*}"
+			else
+			    LINK=$OPTARG
+			    TARGET_DIR=$HOME
+			fi
 			set_variable ACTION FILE_CHECK
 			;;
 		a) # add
-			LINK=$OPTARG
+			if [[ ${dotfiles_paths[$OPTARG]} ]]; then
+			    temp="${dotfiles_paths[$OPTARG]}"
+			    LINK="${temp##*/}"
+			    TARGET_DIR="${temp%/*}"
+			else
+			    LINK=$OPTARG
+			    TARGET_DIR=$HOME
+			fi
 			set_variable ACTION ADD
 			;;
 		r) # restore
-			LINK=$OPTARG
+			if [[ ${dotfiles_paths[$OPTARG]} ]]; then
+			    temp="${dotfiles_paths[$OPTARG]}"
+			    LINK="${temp##*/}"
+			    TARGET_DIR="${temp%/*}"
+			else
+			    LINK=$OPTARG
+			    TARGET_DIR=$HOME
+			fi
 			set_variable ACTION RESTORE
 			;;
 		l) # list
@@ -88,17 +110,17 @@ done
 
 function file_check {
     local file_type
-    file_type=$(file "$HOME/$LINK")
+    file_type=$(file "$TARGET_DIR/$LINK")
     if [[ $file_type =~ 'link' ]]; then
-	echo "File $HOME/$LINK is a symbolic link."
+	echo "File $TARGET_DIR/$LINK is a symbolic link."
 	return 0
     elif [[ $file_type =~ 'text' ]]; then
-	echo "File $HOME/$LINK is a regular text file config."
+	echo "File $TARGET_DIR/$LINK is a regular text file config."
 	return 1	
     else
 	echo $file_type
 	echo $LINK
-    	echo "File $HOME/$LINK does not exist!"
+    	echo "File $TARGET_DIR/$LINK does not exist!"
 	echo "Aborted."
 	return 2
     fi
@@ -109,25 +131,26 @@ function add_link {
     # additionally that file will h REPLAY
     # info about archivization date 
     local file_type
-    file_type=$(file "$HOME/$LINK")
+    file_type=$(file "$TARGET_DIR/$LINK")
     # file has to be regular text file to process
     if [[ ! $file_type =~ 'link' ]]; then 
 	# Check if there is existing dotfile in dotfile folder
-	echo "$DOTFILES_DIR/${LINK/\./}"
-        if [[ -s $DOTFILES_DIR/${LINK/\./} ]]; then
-	    echo "$LINK will be added to $HOME as a symbolic link."
+	# ${LINK//\/\./\/} changes /. to . in /.name.asd -> /name.asd
+	echo "$DOTFILES_DIR/${LINK//\/\./\/}"
+        if [[ -s $DOTFILES_DIR/${LINK//\/\./\/} ]]; then
+	    echo "$LINK will be added to $TARGET_DIR as a symbolic link."
             read -p "Do you want to proceed? [Y/n]: "  REPLAY
 	    # user decded to add the link
             if [[ $REPLAY =~ ^[Yy]$ ]] ; then
 		# found existing dotfile in home folder - it has to be archived
-                if [[ -s $HOME/$LINK ]]; then
-		    echo "Found existing $HOME/$LINK. It will be archived as $HOME/$LINK$OLD."
-                    mv "$HOME/$LINK" "$HOME/$LINK$OLD"
-    	            echo "${ARCHIVIZATION_DATE//?/\#}" >> "$HOME/$LINK$OLD"
-                    echo "$ARCHIVIZATION_DATE" >> "$HOME/$LINK$OLD"
+                if [[ -s $TARGET_DIR/$LINK ]]; then
+		    echo "Found existing $TARGET_DIR/$LINK. It will be archived as $TARGET_DIR/$LINK$OLD."
+                    mv "$TARGET_DIR/$LINK" "$TARGET_DIR/$LINK$OLD"
+    	            echo "${ARCHIVIZATION_DATE//?/\#}" >> "$TARGET_DIR/$LINK$OLD"
+                    echo "$ARCHIVIZATION_DATE" >> "$TARGET_DIR/$LINK$OLD"
                 fi 
-                ln -s "$DOTFILES_DIR/${LINK/\./}" "$HOME/$LINK"
-	        echo "$HOME/$LINK was linked to $DOTFILES_DIR/${LINK/\./}"
+                ln -s "$DOTFILES_DIR/${LINK//\/\./\/}" "$TARGET_DIR/$LINK"
+	        echo "$TARGET_DIR/$LINK was linked to $DOTFILES_DIR/${LINK//\/\./\/}"
 		return 0
 	    # user decided not to add the link
 	    else
@@ -144,7 +167,7 @@ function add_link {
         fi
     # dotfile is already a symbolic link
     else
-	echo "It looks like $HOME/$LINK is already linked to the dotfile folder."
+	echo "It looks like $TARGET_DIR/$LINK is already linked to the dotfile folder."
 	echo "Please check."
 	return 2
     fi
@@ -153,17 +176,17 @@ function add_link {
 
 function restore_link {
     local file_type
-    file_type=$(file "$HOME/$LINK")
+    file_type=$(file "$TARGET_DIR/$LINK")
     # file type has to be link to be restored
     if [[ $file_type =~ 'link' ]]; then 
-	echo "Link $HOME/$LINK will be removed."
+	echo "Link $TARGET_DIR/$LINK will be removed."
         # if no backuo file
-        if [[ ! -s $HOME/$LINK$OLD ]]; then 
-	    echo "It appears that there is no backup file ($HOME/$LINK$OLD)"
+        if [[ ! -s $TARGET_DIR/$LINK$OLD ]]; then 
+	    echo "It appears that there is no backup file ($TARGET_DIR/$LINK$OLD)"
             read -p "Do you want to proceed? [Y/n]: " REPLAY
             if [[ $REPLAY =~ ^[Yy]$ ]]; then
-	        rm "$HOME/$LINK"
-		echo "$HOME/$LINK was removed."
+	        rm "$TARGET_DIR/$LINK"
+		echo "$TARGET_DIR/$LINK was removed."
 	        return 0
 	    else
 		echo "Aborted."
@@ -174,17 +197,17 @@ function restore_link {
 	    echo "Found archived file $LINK$OLD which will be restored."
             read -p "Do you want to proceed? [Y/n]: " REPLAY
             if [[ $REPLAY =~ ^[Yy]$ ]]; then
-                rm "$HOME/$LINK"
-        	echo "${ARCHIVIZATION_DATE//?/\#}" >> "$HOME/$LINK$OLD"
-        	echo "${ARCHIVIZATION_DATE/Archived/Restored}" >> "$HOME/$LINK$OLD"
-        	mv "$HOME/$LINK$OLD" "$HOME/$LINK"
-		echo "$HOME/$LINK was removed, $HOME/$LINK$OLD was succesfuly restored."
+                rm "$TARGET_DIR/$LINK"
+        	echo "${ARCHIVIZATION_DATE//?/\#}" >> "$TARGET_DIR/$LINK$OLD"
+        	echo "${ARCHIVIZATION_DATE/Archived/Restored}" >> "$TARGET_DIR/$LINK$OLD"
+        	mv "$TARGET_DIR/$LINK$OLD" "$TARGET_DIR/$LINK"
+		echo "$TARGET_DIR/$LINK was removed, $TARGET_DIR/$LINK$OLD was succesfuly restored."
         	return 0
             fi
         fi
     # file is regular text file - we take no action
     else 
-        echo "File $HOME/$LINK is not a link, or does not exist."
+        echo "File $TARGET_DIR/$LINK is not a link, or does not exist."
 	echo "Aborted."
 	return 1
     fi
