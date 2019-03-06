@@ -36,19 +36,9 @@ alias lsa='ls -lah --color --group-directories-first'
 # alias antigen='source ~/.oh-my-zsh/custom/plugins/antigen.zsh'
 
 # alias fonts='fc-cache -rv'
-# alias dotfiles='cd ~/.dotfiles'
 
 # alias i3config='vim ~/.config/i3/config'
 
-# alias installconfig='vim ~/.dotfiles/INFO/INFOinstall'
-# alias zshconfig='vim ~/.zshrc'
-# alias vimconfig='vim ~/.vimrc'
 # alias zshtheme='vim ~/.oh-my-zsh/custom/themes/bullet-train.zsh-theme'
-# alias aliasconfig='vim ~/.dotfiles/aliases'
-
-# alias tmuxconfig='vim ~/.tmux.conf'
-# new tmux session, has to get a name of session
-# alias tmuxn='tmux new -s'
-# alias tmuxa='tmux attach  -t'
 
 # alias pobrane='cd /home/fm/Pobrane'

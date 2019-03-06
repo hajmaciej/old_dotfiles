@@ -5,6 +5,9 @@ DOTFILES_DIR=$(find ~ -iname "dotfiles" 2> /dev/null | egrep -i "git")
 OLD='.old'
 ARCHIVIZATION_DATE="# Archived $(date)"
 
+declare -A dotfiles_paths
+dotfiles_paths[qutebrowser]="$USER/.config/qutebrowser/config.py"
+
 function usage {
 	echo "Usage: $0 [-a|-r|-f] file [-h]"
 	echo "	-a adds dotfile to $HOME"
