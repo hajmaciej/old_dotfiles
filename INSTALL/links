@@ -1,10 +1,9 @@
 #!/bin/bash
 
-# DOTFILES_DIR="$HOME/git/dotfiles"
-DOTFILES_DIR=$(find ~ -iname "dotfiles" 2> /dev/null | egrep -i "git")
+DOTFILES_DIR=$(find ~ -iname "dotfiles" 2> /dev/null | grep -E -i "git")
+TARGET_DIR=''
 OLD='.old'
 ARCHIVIZATION_DATE="# Archived $(date)"
-TARGET_DIR=''
 
 declare -A dotfiles_paths
 dotfiles_paths[qutebrowser]="$HOME/.config/qutebrowser/config.py"
@@ -99,7 +98,7 @@ while getopts ":f:a:r:hl" OPTIONS; do
 		    ;;
 		*)
 		    echo "Abnormal termination."
-		    echo ""
+			echo ""
 		    usage
 		    exit 1
 		    ;;
@@ -118,8 +117,6 @@ function file_check {
 	echo "File $TARGET_DIR/$LINK is a regular text file config."
 	return 1	
     else
-	echo $file_type
-	echo $LINK
     	echo "File $TARGET_DIR/$LINK does not exist!"
 	echo "Aborted."
 	return 2
@@ -159,8 +156,6 @@ function add_link {
             fi
 	# there is no such dotfile in dotfile folder provided
         else
-	    echo $DOTFILES_DIR
-	    echo $LINK
        	    echo "File $DOTFILES_DIR/$LINK does not exist!"
 	    echo "Aborted."
 	    return 1
@@ -183,7 +178,7 @@ function restore_link {
         # if no backuo file
         if [[ ! -s $TARGET_DIR/$LINK$OLD ]]; then 
 	    echo "It appears that there is no backup file ($TARGET_DIR/$LINK$OLD)"
-            read -p "Do you want to proceed? [Y/n]: " REPLAY
+            read -p -r "Do you want to proceed? [Y/n]: " REPLAY
             if [[ $REPLAY =~ ^[Yy]$ ]]; then
 	        rm "$TARGET_DIR/$LINK"
 		echo "$TARGET_DIR/$LINK was removed."
@@ -195,7 +190,7 @@ function restore_link {
         # With backup file
         else 
 	    echo "Found archived file $LINK$OLD which will be restored."
-            read -p "Do you want to proceed? [Y/n]: " REPLAY
+            read -p -r "Do you want to proceed? [Y/n]: " REPLAY
             if [[ $REPLAY =~ ^[Yy]$ ]]; then
                 rm "$TARGET_DIR/$LINK"
         	echo "${ARCHIVIZATION_DATE//?/\#}" >> "$TARGET_DIR/$LINK$OLD"
