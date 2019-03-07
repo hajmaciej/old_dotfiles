@@ -7,6 +7,8 @@ ARCHIVIZATION_DATE="# Archived $(date)"
 
 declare -A dotfiles_paths
 dotfiles_paths[qutebrowser]="$HOME/.config/qutebrowser/config.py"
+dotfiles_paths[vsc]="$HOME/.config/Code/User/settings.json"
+dotfiles_paths[i3]="$HOME/.config/i3/config"
 
 function usage {
 	echo "Usage: $0 [-a|-r|-f] file [-h]"
@@ -132,9 +134,13 @@ function add_link {
     # file has to be regular text file to process
     if [[ ! $file_type =~ 'link' ]]; then 
 	# Check if there is existing dotfile in dotfile folder
-	# ${LINK//\/\./\/} changes /. to . in /.name.asd -> /name.asd
-	echo "$DOTFILES_DIR/${LINK//\/\./\/}"
-        if [[ -s $DOTFILES_DIR/${LINK//\/\./\/} ]]; then
+	# TODO DESCRIPTION
+	if [[ "${LINK:0:1}" =~ "." ]]; then 
+	    UNHIDDEN_DOTFILE="${LINK:1:${#LINK}}"
+	else
+	    UNHIDDEN_DOTFILE="$LINK"
+	fi
+        if [[ -s $DOTFILES_DIR/$UNHIDDEN_DOTFILE ]]; then
 	    echo "$LINK will be added to $TARGET_DIR as a symbolic link."
             read -p "Do you want to proceed? [Y/n]: "  REPLAY
 	    # user decded to add the link
@@ -146,8 +152,8 @@ function add_link {
     	            echo "${ARCHIVIZATION_DATE//?/\#}" >> "$TARGET_DIR/$LINK$OLD"
                     echo "$ARCHIVIZATION_DATE" >> "$TARGET_DIR/$LINK$OLD"
                 fi 
-                ln -s "$DOTFILES_DIR/${LINK//\/\./\/}" "$TARGET_DIR/$LINK"
-	        echo "$TARGET_DIR/$LINK was linked to $DOTFILES_DIR/${LINK//\/\./\/}"
+                ln -s "$DOTFILES_DIR/$UNHIDDEN_DOTFILE" "$TARGET_DIR/$LINK"
+	        echo "$TARGET_DIR/$LINK was linked to $DOTFILES_DIR/$UNHIDDEN_DOTFILE"
 		return 0
 	    # user decided not to add the link
 	    else
@@ -178,7 +184,7 @@ function restore_link {
         # if no backuo file
         if [[ ! -s $TARGET_DIR/$LINK$OLD ]]; then 
 	    echo "It appears that there is no backup file ($TARGET_DIR/$LINK$OLD)"
-            read -p -r "Do you want to proceed? [Y/n]: " REPLAY
+            read -p "Do you want to proceed? [Y/n]: " REPLAY
             if [[ $REPLAY =~ ^[Yy]$ ]]; then
 	        rm "$TARGET_DIR/$LINK"
 		echo "$TARGET_DIR/$LINK was removed."
@@ -190,7 +196,7 @@ function restore_link {
         # With backup file
         else 
 	    echo "Found archived file $LINK$OLD which will be restored."
-            read -p -r "Do you want to proceed? [Y/n]: " REPLAY
+            read -p "Do you want to proceed? [Y/n]: " REPLAY
             if [[ $REPLAY =~ ^[Yy]$ ]]; then
                 rm "$TARGET_DIR/$LINK"
         	echo "${ARCHIVIZATION_DATE//?/\#}" >> "$TARGET_DIR/$LINK$OLD"
