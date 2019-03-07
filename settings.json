@@ -1,0 +1,313 @@
+{
+  "vsicons.dontShowNewVersionMessage": true,
+  
+  "workbench.iconTheme": "eq-material-theme-icons-darker",
+  "workbench.startupEditor": "welcomePage",
+  
+  "window.openWithoutArgumentsInNewWindow": "on",
+  "window.openFoldersInNewWindow": "off",
+  "window.openFilesInNewWindow": "on",
+  "window.menuBarVisibility": "toggle",
+  
+  "files.autoSave": "onFocusChange",
+  "editor.fontSize": 14,
+  "editor.fontFamily": "'SF Mono', 'FiraCode', 'monospace', 'Inconsolata'",
+  "editor.fontLigatures": true,
+  "editor.minimap.enabled": true,
+  "editor.minimap.maxColumn": 80,
+  "editor.tabCompletion": true,
+  "editor.formatOnType": false,
+  "editor.cursorStyle": "underline",
+  "editor.renderControlCharacters": true,
+  "editor.smoothScrolling": true,
+  "editor.tabSize": 4,
+  "vscode-json-editor.theme": "dark",
+  "explorer.confirmDragAndDrop": false,
+  
+
+  // file explorer 
+  "explorer.openEditors.visible": 0,
+  // Zen Mode
+  "zenMode.hideTabs": false,
+  "zenMode.hideActivityBar": false,
+  
+  // Astyle
+  "astyle.cpp.enable": false,
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// ++++++++++++++++++++++++++++++++++ C++ +++++++++++++++++++++++++++++++++++++++++++++
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// ================================== CodeRunner ==================================
+"code-runner.executorMap": {
+  "python": "python3",
+  "cpp": "cd $dir && g++-7 -g -std=c++14 -Wall -pedantic -Weffc++ $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+  "cpp1": "cd $dir && g++-7 -g -std=c++14 -Wall -pedantic -Weffc++ -c *.cpp && g++-7 -g -std=c++14 -Wall -pedantic -Weffc++ *.o -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+  "cpp+gsl": "cd $dir && g++-7 -g -std=c++03 -Wall -pedantic -Weffc++ -I/home/fm/Dev/include -c *.cpp && g++-7 -g -std=c++03 -Wall -pedantic -Weffc++ -L/home/fm/Dev/lib *.o -lgsl -lgslcblas -lm -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+},
+  "code-runner.runInTerminal": true,
+  "code-runner.saveFileBeforeRun": true,
+
+// ================================== c-cpp-flylint ==================================
+  //"c-cpp-flylint.cppcheck.executable": "clang",   
+  //"c-cpp-flylint.cppcheck.standard": "",
+  "c-cpp-flylint.clang.enable": true,
+  "c-cpp-flylint.clang.language": "c++",
+  "c-cpp-flylint.clang.pedantic": true,
+  
+  "c-cpp-flylint.flexelint.enable": false,
+  "c-cpp-flylint.cppcheck.enable": false,
+  "c-cpp-flylint.cppcheck.language": "c++", 
+  "c-cpp-flylint.standard": [
+    "c++11",
+    "c++14"
+  ],
+// ================================== cppcheck ==================================
+  "cppcheck.includePaths": [
+    "${workspaceRoot}"
+  ],
+// ================================== C_Cpp ==================================
+  "C_Cpp.intelliSenseEngineFallback": "Enabled",
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// ================================== Python settings ==================================
+  "python.autoComplete.addBrackets": true,
+  "python.linting.pylintEnabled": false,
+  "python.linting.pep8Enabled": false,
+  "python.linting.lintOnSave": true,
+  "python.linting.flake8Enabled": true,
+  "python.linting.flake8Args": ["--ignore=E501,E127,E128"],
+  //"python.linting.lintOnTextChange": true,
+  
+  // Telemetry
+  "telemetry.enableTelemetry": false,
+
+// ================================== TODO PARSER ==================================
+  "TodoParser": {
+    "markers": [
+      ["NOTE:", 3],
+      ["REVIEW:", 3],
+      ["NOTE!:", 2],
+      ["TODO:", 2], 
+      ["FIXME:", 1],
+      ["TODO!:", 1],
+      ["FIXME!:", 0]
+    ],
+  },
+  
+// ================================== TODO Highlight ==================================
+  "todohighlight.isEnable": true,
+  "todohighlight.keywords": [
+    {  
+      "text": "NOTE:",
+      "color": "#282C34",
+      "backgroundColor": "#4E8F67",
+      // "overviewRulerColor": "black",
+      // "borderRadius":"2px",
+      // "cursor":"pointer",
+      // "border":"1px solid #eee",
+      "isWholeLine": false
+    },
+    {  
+      "text": "NOTE!:",
+      "color": "#282C34",
+      "backgroundColor": "#4E8F67",
+      // "overviewRulerColor": "black",
+      // "borderRadius":"2px",
+      // "cursor":"pointer",
+      // "border":"1px solid #eee",
+      "isWholeLine": true
+    },
+    {
+      "text": "FIXME:",
+      "color": "white",
+      "backgroundColor": "#CE4032",
+      // "overviewRulerColor": "black",
+      // "borderRadius":"2px",
+      // "cursor":"pointer",
+      // "border":"1px solid #eee",
+      "isWholeLine": false
+    },
+    {
+      "text": "FIXME!:",
+      "color": "white",
+      "backgroundColor": "#CE4032",
+      // "overviewRulerColor": "black",
+      // "borderRadius":"2px",
+      // "cursor":"pointer",
+      // "border":"1px solid #eee",
+      "isWholeLine": true
+    },
+    {
+      "text": "TODO:",
+      "color": "white",
+      "backgroundColor": "#134CC5",
+      // "overviewRulerColor": "black",
+      // "borderRadius":"2px",
+      // "cursor":"pointer",
+      // "border":"1px solid #eee",
+      "isWholeLine": false
+    },
+    {
+      "text": "TODO!:",
+      "color": "white",
+      "backgroundColor": "#134CC5",
+      // "overviewRulerColor": "black",
+      // "borderRadius":"2px",
+      // "cursor":"pointer",
+      // "border":"1px solid #eee",
+      "isWholeLine": true
+    },
+  {   "text": "REVIEW:",
+      "color": "white",
+      "backgroundColor": "#8C8C8C",
+      // "overviewRulerColor": "black",
+      // "borderRadius":"2px",
+      // "cursor":"pointer",
+      // "border":"1px solid #eee",
+      "isWholeLine": false
+    }
+  ],
+    
+// ================================== Integrated Terminal ==================================
+  "terminal.integrated.fontSize": 13,
+  "terminal.integrated.cursorStyle": "underline",
+  "terminal.integrated.fontFamily": "SFMono Nerd Font",
+  "terminal.integrated.fontWeight": "normal",
+  "terminal.explorerKind": "integrated",
+
+// ================================== Files ==================================
+  "files.exclude": {
+    "**/.git": true,
+    "**/*.o": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/*.gz": true,
+    "**/*.dvi": true
+  },
+// ================================== Code Spell Checker ==================================
+  "cSpell.ignoreRegExpList": [
+    "\\\\\\w*(\\[.*?\\])?(\\{.*?\\})?",
+    "\\$.+?\\$",
+    ".*?%.*"
+  ],
+  "cSpell.enabledLanguageIds": [
+    "c",
+    "csharp",
+    "css",
+    "go",
+    "handlebars",
+    "html",
+    "jade",
+    "javascript",
+    "javascriptreact",
+    "json",
+    "latex",
+    "less",
+    "markdown",
+    "php",
+    "plaintext",
+    "python",
+    "pub",
+    "restructuredtext",
+    "scss",
+    "text",
+    "typescript",
+    "typescriptreact",
+    "yml"
+  ],
+  "cSpell.language": "pl,en",
+  "cSpell.userWords": [
+    "bezpromienistym",
+    "przyzłączowych",
+    "półprzewodnikowych",
+    "rekombinując"
+  ],
+
+// ================================== latex-workshop ==================================
+  "latex-workshop.latex.tools": [
+    {
+       "name": "latexmk",
+       "command": "latexmk",
+       "args": [
+         "-synctex=1",
+         "-interaction=nonstopmode",
+         "-shell-escape",
+         "-file-line-error",
+         "-pdf",
+         "-f",
+         "%DOC%"
+       ]
+    },
+    {
+      "name": "pdflatex",
+      "command": "pdflatex",
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "%DOC%"
+      ]
+    },
+    {
+      "name": "bibtex",
+      "command": "bibtex",
+      "args": [
+        "%DOCFILE%"
+      ]
+    }
+  ],
+"latex-workshop.latex.recipes": [
+    {
+      "name": "latexmk",
+      "tools": [
+        "latexmk"
+      ]
+    },
+    {
+      "name": "pdflatex -> bibtex -> pdflatex*2",
+      "tools": [
+        "pdflatex",
+        "bibtex",
+        "pdflatex",
+        "pdflatex"
+      ]
+    }
+  ],
+
+"latex-workshop.view.pdf.zoom": "1.2",
+"latex-workshop.view.pdf.hand": true,
+"latex-workshop.chktex.enabled": true,
+"latex-workshop.latex.clean.enabled": true,
+"latex-workshop.view.pdf.viewer": "tab",
+"latex-workshop.message.update.show": false,
+
+// GITLENS +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+"gitlens.keymap": "chorded",
+"gitlens.historyExplorer.enabled": true,
+"gitlens.advanced.messages": {
+  "suppressCommitHasNoPreviousCommitWarning": false,
+  "suppressCommitNotFoundWarning": false,
+  "suppressFileNotUnderSourceControlWarning": false,
+  "suppressGitVersionWarning": false,
+  "suppressLineUncommittedWarning": false,
+  "suppressNoRepositoryWarning": false,
+  "suppressResultsExplorerNotice": false,
+  "suppressShowKeyBindingsNotice": true
+},
+"vim.easymotionMarkerFontFamily": "SF Mono",
+"vim.useSystemClipboard": true,
+"cmake.autoRestartBuild": true,
+"cmake.configureOnOpen": true,
+"gitlens.gitExplorer.files.layout": "tree",
+"gitlens.views.repositories.files.layout": "tree",
+"gitlens.views.fileHistory.enabled": true,
+"gitlens.views.lineHistory.enabled": true,
+"latex-workshop.latex.autoClean.run": "onBuilt",
+"window.titleBarStyle": "native",
+}

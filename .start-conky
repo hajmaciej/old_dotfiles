@@ -1,0 +1,5 @@
+#!/bin/sh
+#Conky Setup by http://www.NoobsLab.com
+sleep 20
+conky -d -c ~/.conkyrc
+exit
