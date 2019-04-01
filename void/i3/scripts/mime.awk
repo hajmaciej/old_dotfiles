@@ -1,0 +1,16 @@
+#!/bin/awk
+
+BEGIN {
+    RS = "\n"
+    FS = "=" 
+}
+{ 
+    print $2 
+    
+}:wq
+
+x-scheme-handler/http=vivaldi-stable-i3.desktop
+x-scheme-handler/https=vivaldi-stable-i3.desktop
+x-scheme-handler/about=vivaldi-stable-i3.desktop
+x-scheme-handler/unknown=vivaldi-stable-i3.desktop
+text/html=vivaldi-stable-i3.desktop
